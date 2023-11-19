@@ -1,6 +1,7 @@
 # general
 build/
 bin/
+cortos_build/
 
 # Prerequisites
 *.d

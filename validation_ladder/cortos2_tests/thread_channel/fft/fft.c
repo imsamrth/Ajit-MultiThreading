@@ -117,7 +117,7 @@ fft( complex *v, int n, complex *tmp )
 	}
 	return;
 }
-
+
 /* 
    ifft(v,N):
    [0] If N==1 then return.
