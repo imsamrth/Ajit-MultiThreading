@@ -38,14 +38,20 @@ int main()
 			(double) (0),
 			(double) (0),
 			(double)(HIDDEN));
-
-	// close the channel..
 	uint32_t number_imgs = 1 ;
-	cortos_printf("SDF &%d", HIDDEN);
+	cortos_printf("SDF &%d \n", HIDDEN);
 	Matrix* m = matrix_create(28,28);
-	cortos_printf("Hello prtham matrix created :))");
-	//Img** imgs = csv_to_imgs_from_C(1);
-
+	cortos_printf("Hello prtham matrix created :))\n");
+	Img** imgs = csv_to_imgs_from_C(number_imgs);
+	cortos_printf(":// IMAGE LOADED \n");
+	NeuralNetwork* net = network_load_from_C();
+	cortos_printf("Network loaded \n");
+	double score = network_predict_imgs(net, imgs, number_imgs);
+	cortos_printf("PREDICTION DONE, ABB KY \n");
+	cortos_printf("Prediction from Network: %1.5f \n", score);
+	imgs_free(imgs, number_imgs);
+	network_free(net);
+	cortos_printf("Network free BTP Done\n");
 	return(1);
 }
 //

@@ -958,15 +958,18 @@ NeuralNetwork* network_create(int input, int hidden, int output, double lr) {
 // }
 
 Matrix* network_predict_img(NeuralNetwork* net, Img* img) {
+	cortos_printf("predict for single called \n");
 	Matrix* img_data = matrix_flatten(img->img_data, 0);
 	Matrix* res = network_predict(net, img_data);
 	matrix_free(img_data);
+	cortos_printf("predict simgle completed\n");
 	return res;
 }
 
 double network_predict_imgs(NeuralNetwork* net, Img** imgs, int n) {
 	int n_correct = 0;
 	int i ;
+	cortos_printf("prediction called %d \n", i);
 	for ( i = 0; i < n; i++) {
 		Matrix* prediction = network_predict_img(net, imgs[i]);
 		if (matrix_argmax(prediction) == imgs[i]->label) {
@@ -974,6 +977,7 @@ double network_predict_imgs(NeuralNetwork* net, Img** imgs, int n) {
 		}
 		matrix_free(prediction);
 	}
+	cortos_printf("prediction completed %d \n", n_correct);
 	return 1.0 * n_correct / n;
 }
 
