@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "../include/matrix.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,22 +10,25 @@ Matrix* matrix_create(int row, int col) {
 	matrix->rows = row;
 	matrix->cols = col;
 	matrix->entries = malloc(row * sizeof(double*));
-	for (int i = 0; i < row; i++) {
+	int i;
+	for ( i = 0; i < row; i++) {
 		matrix->entries[i] = malloc(col * sizeof(double));
 	}
 	return matrix;
 }
 
 void matrix_fill(Matrix *m, int n) {
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			m->entries[i][j] = n;
 		}
 	}
 }
 
 void matrix_free(Matrix *m) {
-	for (int i = 0; i < m->rows; i++) {
+		int i ;
+	for ( i = 0; i < m->rows; i++) {
 		free(m->entries[i]);
 	}
 	free(m->entries);
@@ -35,8 +38,9 @@ void matrix_free(Matrix *m) {
 
 void matrix_print(Matrix* m) {
 	printf("Rows: %d Columns: %d\n", m->rows, m->cols);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			printf("%1.3f ", m->entries[i][j]);
 		}
 		printf("\n");
@@ -45,8 +49,9 @@ void matrix_print(Matrix* m) {
 
 Matrix* matrix_copy(Matrix* m) {
 	Matrix* mat = matrix_create(m->rows, m->cols);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			mat->entries[i][j] = m->entries[i][j];
 		}
 	}
@@ -57,8 +62,9 @@ void matrix_save(Matrix* m, char* file_string) {
 	FILE* file = fopen(file_string, "w");
 	fprintf(file, "%d\n", m->rows);
 	fprintf(file, "%d\n", m->cols);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			fprintf(file, "%.6f\n", m->entries[i][j]);
 		}
 	}
@@ -74,8 +80,9 @@ Matrix* matrix_load(char* file_string) {
 	fgets(entry, MAXCHAR, file);
 	int cols = atoi(entry);
 	Matrix* m = matrix_create(rows, cols);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			fgets(entry, MAXCHAR, file);
 			m->entries[i][j] = strtod(entry, NULL);
 		}
@@ -87,8 +94,9 @@ Matrix* matrix_load(char* file_string) {
 
 Matrix* matrix_load_from_C(int rows, int cols, double * weights) {
 	Matrix* m = matrix_create(rows, cols);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			m->entries[i][j] = weights[i*cols + j];
 		}
 	}
@@ -107,10 +115,11 @@ void matrix_randomize(Matrix* m, int n) {
 	// Pulling from a random distribution of 
 	// Min: -1 / sqrt(n)
 	// Max: 1 / sqrt(n)
+		int i, j;
 	double min = -1.0 / sqrt(n);
 	double max = 1.0 / sqrt(n);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			m->entries[i][j] = uniform_distribution(min, max);
 		}
 	}
@@ -120,7 +129,8 @@ int matrix_argmax(Matrix* m) {
 	// Expects a Mx1 matrix
 	double max_score = 0;
 	int max_idx = 0;
-	for (int i = 0; i < m->rows; i++) {
+		int i, j;
+	for ( i = 0; i < m->rows; i++) {
 		if (m->entries[i][0] > max_score) {
 			max_score = m->entries[i][0];
 			max_idx = i;
@@ -132,6 +142,7 @@ int matrix_argmax(Matrix* m) {
 Matrix* matrix_flatten(Matrix* m, int axis) {
 	// Axis = 0 -> Column Vector, Axis = 1 -> Row Vector
 	Matrix* mat;
+	int i, j;
 	if (axis == 0) {
 		mat = matrix_create(m->rows * m->cols, 1);
 	} else if (axis == 1) {
@@ -140,8 +151,8 @@ Matrix* matrix_flatten(Matrix* m, int axis) {
 		printf("Argument to matrix_flatten must be 0 or 1");
 		exit(EXIT_FAILURE);
 	}
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	for ( i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			if (axis == 0) mat->entries[i * m->cols + j][0] = m->entries[i][j];
 			else if (axis == 1) mat->entries[0][i * m->cols + j] = m->entries[i][j];
 		}

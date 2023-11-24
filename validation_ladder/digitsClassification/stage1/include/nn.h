@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../matrix/matrix.h"
-#include "../util/img.h"
+#include "matrix.h"
+#include "img.h"
 
 typedef struct {
 	int input;
@@ -13,8 +13,8 @@ typedef struct {
 } NeuralNetwork;
 
 NeuralNetwork* network_create(int input, int hidden, int output, double lr);
-void network_train(NeuralNetwork* net, Matrix* input_data, Matrix* output_data);
-void network_train_batch_imgs(NeuralNetwork* net, Img** imgs, int batch_size);
+//void network_train(NeuralNetwork* net, Matrix* input_data, Matrix* output_data);
+//void network_train_batch_imgs(NeuralNetwork* net, Img** imgs, int batch_size);
 Matrix* network_predict_img(NeuralNetwork* net, Img* img);
 double network_predict_imgs(NeuralNetwork* net, Img** imgs, int n);
 Matrix* network_predict(NeuralNetwork* net, Matrix* input_data);

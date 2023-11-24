@@ -1,4 +1,4 @@
-#include "ops.h"
+#include "../include/ops.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -10,8 +10,9 @@ int check_dimensions(Matrix *m1, Matrix *m2) {
 Matrix* multiply(Matrix *m1, Matrix *m2) {
 	if (check_dimensions(m1, m2)) {
 		Matrix *m = matrix_create(m1->rows, m1->cols);
-		for (int i = 0; i < m1->rows; i++) {
-			for (int j = 0; j < m2->cols; j++) {
+		int i, j;
+		for (i = 0; i < m1->rows; i++) {
+			for (j = 0; j < m2->cols; j++) {
 				m->entries[i][j] = m1->entries[i][j] * m2->entries[i][j];
 			}
 		}
@@ -25,8 +26,9 @@ Matrix* multiply(Matrix *m1, Matrix *m2) {
 Matrix* add(Matrix *m1, Matrix *m2) {
 	if (check_dimensions(m1, m2)) {
 		Matrix *m = matrix_create(m1->rows, m1->cols);
-		for (int i = 0; i < m1->rows; i++) {
-			for (int j = 0; j < m2->cols; j++) {
+		int i, j;
+		for (i = 0; i < m1->rows; i++) {
+			for (j = 0; j < m2->cols; j++) {
 				m->entries[i][j] = m1->entries[i][j] + m2->entries[i][j];
 			}
 		}
@@ -38,10 +40,11 @@ Matrix* add(Matrix *m1, Matrix *m2) {
 }
 
 Matrix* subtract(Matrix *m1, Matrix *m2) {
+	int i, j;
 	if (check_dimensions(m1, m2)) {
 		Matrix *m = matrix_create(m1->rows, m1->cols);
-		for (int i = 0; i < m1->rows; i++) {
-			for (int j = 0; j < m2->cols; j++) {
+		for (i = 0; i < m1->rows; i++) {
+			for (j = 0; j < m2->cols; j++) {
 				m->entries[i][j] = m1->entries[i][j] - m2->entries[i][j];
 			}
 		}
@@ -54,8 +57,9 @@ Matrix* subtract(Matrix *m1, Matrix *m2) {
 
 Matrix* apply(double (*func)(double), Matrix* m) {
 	Matrix *mat = matrix_copy(m);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	int i, j;
+	for (i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			mat->entries[i][j] = (*func)(m->entries[i][j]);
 		}
 	}
@@ -64,11 +68,12 @@ Matrix* apply(double (*func)(double), Matrix* m) {
 
 Matrix* dot(Matrix *m1, Matrix *m2) {
 	if (m1->cols == m2->rows) {
+		int i, j, k;
 		Matrix *m = matrix_create(m1->rows, m2->cols);
-		for (int i = 0; i < m1->rows; i++) {
-			for (int j = 0; j < m2->cols; j++) {
+		for (i = 0; i < m1->rows; i++) {
+			for (j = 0; j < m2->cols; j++) {
 				double sum = 0;
-				for (int k = 0; k < m2->rows; k++) {
+				for (k = 0; k < m2->rows; k++) {
 					sum += m1->entries[i][k] * m2->entries[k][j];
 				}
 				m->entries[i][j] = sum;
@@ -83,8 +88,9 @@ Matrix* dot(Matrix *m1, Matrix *m2) {
 
 Matrix* scale(double n, Matrix* m) {
 	Matrix* mat = matrix_copy(m);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	int i, j;
+	for (i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			mat->entries[i][j] *= n;
 		}
 	}
@@ -93,8 +99,9 @@ Matrix* scale(double n, Matrix* m) {
 
 Matrix* addScalar(double n, Matrix* m) {
 	Matrix* mat = matrix_copy(m);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	int i, j;
+	for (i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			mat->entries[i][j] += n;
 		}
 	}
@@ -103,8 +110,9 @@ Matrix* addScalar(double n, Matrix* m) {
 
 Matrix* transpose(Matrix* m) {
 	Matrix* mat = matrix_create(m->cols, m->rows);
-	for (int i = 0; i < m->rows; i++) {
-		for (int j = 0; j < m->cols; j++) {
+	int i, j;
+	for (i = 0; i < m->rows; i++) {
+		for (j = 0; j < m->cols; j++) {
 			mat->entries[j][i] = m->entries[i][j];
 		}
 	}

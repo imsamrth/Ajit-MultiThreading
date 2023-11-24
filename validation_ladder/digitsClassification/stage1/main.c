@@ -12,13 +12,12 @@
 #endif
 #include <thread_channel.h>
 #include <ajit_access_routines.h>
-#include <ds.h>
-#include "util/img.h"
-#include "neural/activations.h"
-#include "neural/nn.h"
-#include "matrix/matrix.h"
-#include "matrix/ops.h"
-#include "net/net.h"
+#include "include/matrix.h"
+#include "include/ops.h"
+#include "include/img.h"
+#include "include/activations.h"
+#include "include/nn.h"
+#include "include/net.h"
 
 volatile ThreadChannel volatile tc;
 
@@ -48,7 +47,7 @@ int main_00()
 	// close the channel..
 	int number_imgs = 1 ;
 	PRINTF("SDF &%d", HIDDEN);
-	Matrix* m = matrix_create(28,28);
+	//Matrix* m = matrix_create(28,28);
 	//Img** imgs = csv_to_imgs_from_C(1);
 
 	return(1);
