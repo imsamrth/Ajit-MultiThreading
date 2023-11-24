@@ -6,13 +6,13 @@
 #define MAXCHAR 100
 
 Matrix* matrix_create(int row, int col) {
-	Matrix *matrix = malloc(sizeof(Matrix));
+	Matrix *matrix = cortos_bget(sizeof(Matrix));
 	matrix->rows = row;
 	matrix->cols = col;
-	matrix->entries = malloc(row * sizeof(double*));
+	matrix->entries = cortos_bget(row * sizeof(double*));
 	int i;
 	for ( i = 0; i < row; i++) {
-		matrix->entries[i] = malloc(col * sizeof(double));
+		matrix->entries[i] = cortos_bget(col * sizeof(double));
 	}
 	return matrix;
 }
@@ -29,21 +29,21 @@ void matrix_fill(Matrix *m, int n) {
 void matrix_free(Matrix *m) {
 		int i ;
 	for ( i = 0; i < m->rows; i++) {
-		free(m->entries[i]);
+		cortos_brel(m->entries[i]);
 	}
-	free(m->entries);
-	free(m);
-	m = NULL;
+	cortos_brel(m->entries);
+	cortos_brel(m);
+	//m = NULL;
 }
 
 void matrix_print(Matrix* m) {
-	printf("Rows: %d Columns: %d\n", m->rows, m->cols);
+	cortos_printf("Rows: %d Columns: %d\n", m->rows, m->cols);
 		int i, j;
 	for ( i = 0; i < m->rows; i++) {
 		for (j = 0; j < m->cols; j++) {
-			printf("%1.3f ", m->entries[i][j]);
+			cortos_printf("%1.3f ", m->entries[i][j]);
 		}
-		printf("\n");
+		cortos_printf("\n");
 	}
 }
 
@@ -59,36 +59,36 @@ Matrix* matrix_copy(Matrix* m) {
 }
 
 void matrix_save(Matrix* m, char* file_string) {
-	FILE* file = fopen(file_string, "w");
-	fprintf(file, "%d\n", m->rows);
-	fprintf(file, "%d\n", m->cols);
-		int i, j;
-	for ( i = 0; i < m->rows; i++) {
-		for (j = 0; j < m->cols; j++) {
-			fprintf(file, "%.6f\n", m->entries[i][j]);
-		}
-	}
-	printf("Successfully saved matrix to %s\n", file_string);
-	fclose(file);
+	// FILE* file = fopen(file_string, "w");
+	// cortos_printf(file, "%d\n", m->rows);
+	// cortos_printf(file, "%d\n", m->cols);
+	// 	int i, j;
+	// for ( i = 0; i < m->rows; i++) {
+	// 	for (j = 0; j < m->cols; j++) {
+	// 		cortos_printf(file, "%.6f\n", m->entries[i][j]);
+	// 	}
+	// }
+	// cortos_printf("Successfully saved matrix to %s\n", file_string);
+	// fclose(file);
 }
 
 Matrix* matrix_load(char* file_string) {
-	FILE* file = fopen(file_string, "r");
-	char entry[MAXCHAR]; 
-	fgets(entry, MAXCHAR, file);
-	int rows = atoi(entry);
-	fgets(entry, MAXCHAR, file);
-	int cols = atoi(entry);
-	Matrix* m = matrix_create(rows, cols);
-		int i, j;
-	for ( i = 0; i < m->rows; i++) {
-		for (j = 0; j < m->cols; j++) {
-			fgets(entry, MAXCHAR, file);
-			m->entries[i][j] = strtod(entry, NULL);
-		}
-	}
-	printf("Sucessfully loaded matrix from %s\n", file_string);
-	fclose(file);
+	// FILE* file = fopen(file_string, "r");
+	// char entry[MAXCHAR]; 
+	// fgets(entry, MAXCHAR, file);
+	// int rows = atoi(entry);
+	// fgets(entry, MAXCHAR, file);
+	// int cols = atoi(entry);
+	Matrix* m = matrix_create(1, 1);
+	// 	int i, j;
+	// for ( i = 0; i < m->rows; i++) {
+	// 	for (j = 0; j < m->cols; j++) {
+	// 		fgets(entry, MAXCHAR, file);
+	// 		m->entries[i][j] = strtod(entry, NULL);
+	// 	}
+	// }
+	// cortos_printf("Sucessfully loaded matrix from %s\n", file_string);
+	// fclose(file);
 	return m;
 }
 
@@ -100,7 +100,7 @@ Matrix* matrix_load_from_C(int rows, int cols, double * weights) {
 			m->entries[i][j] = weights[i*cols + j];
 		}
 	}
-	printf("Sucessfully loaded matrix from %d\n", rows);
+	cortos_printf("Sucessfully loaded matrix from %d\n", rows);
 	return m;
 }
 
@@ -108,7 +108,8 @@ double uniform_distribution(double low, double high) {
 	double difference = high - low; // The difference between the two
 	int scale = 10000;
 	int scaled_difference = (int)(difference * scale);
-	return low + (1.0 * (rand() % scaled_difference) / scale);
+	//return low + (1.0 * (rand() % scaled_difference) / scale);
+	return low ;
 }
 
 void matrix_randomize(Matrix* m, int n) {
@@ -148,8 +149,8 @@ Matrix* matrix_flatten(Matrix* m, int axis) {
 	} else if (axis == 1) {
 		mat = matrix_create(1, m->rows * m->cols);
 	} else {
-		printf("Argument to matrix_flatten must be 0 or 1");
-		exit(EXIT_FAILURE);
+		cortos_printf("Argument to matrix_flatten must be 0 or 1");
+		cortos_exit(10);
 	}
 	for ( i = 0; i < m->rows; i++) {
 		for (j = 0; j < m->cols; j++) {

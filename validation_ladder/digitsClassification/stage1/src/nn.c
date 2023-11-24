@@ -1,5 +1,5 @@
 #include "../include/nn.h"
-#include <sys/stat.h>
+//#include <sys/stat.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -849,7 +849,7 @@ double LAYER2[48*10] = {
 
 // 784, 300, 10
 NeuralNetwork* network_create(int input, int hidden, int output, double lr) {
-	NeuralNetwork* net = malloc(sizeof(NeuralNetwork));
+	NeuralNetwork* net = cortos_bget(sizeof(NeuralNetwork));
 	net->input = input;
 	net->hidden = hidden;
 	net->output = output;
@@ -993,65 +993,65 @@ Matrix* network_predict(NeuralNetwork* net, Matrix* input_data) {
 }
 
 void network_save(NeuralNetwork* net, char* file_string) {
-	mkdir(file_string, 0777);
-	// Write the descriptor file
-	chdir(file_string);
-	FILE* descriptor = fopen("descriptor", "w");
-	fprintf(descriptor, "%d\n", net->input);
-	fprintf(descriptor, "%d\n", net->hidden);
-	fprintf(descriptor, "%d\n", net->output);
-	fclose(descriptor);
-	matrix_save(net->hidden_weights, "hidden");
-	matrix_save(net->output_weights, "output");
-	printf("Successfully written to '%s'\n", file_string);
-	chdir("-"); // Go back to the orignal directory
+	// mkdir(file_string, 0777);
+	// // Write the descriptor file
+	// chdir(file_string);
+	// FILE* descriptor = fopen("descriptor", "w");
+	// cortos_printf(descriptor, "%d\n", net->input);
+	// cortos_printf(descriptor, "%d\n", net->hidden);
+	// cortos_printf(descriptor, "%d\n", net->output);
+	// fclose(descriptor);
+	// matrix_save(net->hidden_weights, "hidden");
+	// matrix_save(net->output_weights, "output");
+	// printf("Successfully written to '%s'\n", file_string);
+	// chdir("-"); // Go back to the orignal directory
 }
 
 NeuralNetwork* network_load(char* file_string) {
-	NeuralNetwork* net = malloc(sizeof(NeuralNetwork));
-	char entry[MAXCHAR];
-	chdir(file_string);
+	NeuralNetwork* net = cortos_bget(sizeof(NeuralNetwork));
+	// char entry[MAXCHAR];
+	// chdir(file_string);
 
-	FILE* descriptor = fopen("descriptor", "r");
-	fgets(entry, MAXCHAR, descriptor);
-	net->input = atoi(entry);
-	fgets(entry, MAXCHAR, descriptor);
-	net->hidden = atoi(entry);
-	fgets(entry, MAXCHAR, descriptor);
-	net->output = atoi(entry);
-	fclose(descriptor);
-	net->hidden_weights = matrix_load("hidden");
-	net->output_weights = matrix_load("output");
-	printf("Successfully loaded network from '%s'\n", file_string);
-	chdir("-"); // Go back to the original directory
+	// FILE* descriptor = fopen("descriptor", "r");
+	// fgets(entry, MAXCHAR, descriptor);
+	// net->input = atoi(entry);
+	// fgets(entry, MAXCHAR, descriptor);
+	// net->hidden = atoi(entry);
+	// fgets(entry, MAXCHAR, descriptor);
+	// net->output = atoi(entry);
+	// fclose(descriptor);
+	// net->hidden_weights = matrix_load("hidden");
+	// net->output_weights = matrix_load("output");
+	// cortos_printf("Successfully loaded network from '%s'\n", file_string);
+	// chdir("-"); // Go back to the original directory
 	return net;
 }
 
 NeuralNetwork* network_load_from_C() {
-	NeuralNetwork* net = malloc(sizeof(NeuralNetwork));
+	NeuralNetwork* net = cortos_bget(sizeof(NeuralNetwork));
 
 	net->input = INPUT;
 	net->hidden = HIDDEN;
 	net->output = OUT;
 	net->hidden_weights = matrix_load_from_C(HIDDEN, INPUT, LAYER1);
 	net->output_weights = matrix_load_from_C(OUT, HIDDEN, LAYER2);
-	printf("Successfully loaded network from '%s'\n", "NETWORDD");
+	cortos_printf("Successfully loaded network from '%s'\n", "NETWORDD");
 	return net;
 }
 
 void network_print(NeuralNetwork* net) {
-	printf("# of Inputs: %d\n", net->input);
-	printf("# of Hidden: %d\n", net->hidden);
-	printf("# of Output: %d\n", net->output);
-	printf("Hidden Weights: \n");
+	cortos_printf("# of Inputs: %d\n", net->input);
+	cortos_printf("# of Hidden: %d\n", net->hidden);
+	cortos_printf("# of Output: %d\n", net->output);
+	cortos_printf("Hidden Weights: \n");
 	matrix_print(net->hidden_weights);
-	printf("Output Weights: \n");
+	cortos_printf("Output Weights: \n");
 	matrix_print(net->output_weights);
 }
 
 void network_free(NeuralNetwork *net) {
 	matrix_free(net->hidden_weights);
 	matrix_free(net->output_weights);
-	free(net);
-	net = NULL;
+	cortos_brel(net);
+	//net = NULL;
 }

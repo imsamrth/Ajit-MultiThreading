@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <math.h>
 #include <cortos.h>
+#include <core_portme.h>
+#include <thread_channel.h>
 #include <ajit_access_routines.h>
 #include "include/matrix.h"
 #include "include/ops.h"
@@ -13,7 +15,6 @@
 #include "include/activations.h"
 #include "include/nn.h"
 #include "include/net.h"
-
 //volatile ThreadChannel volatile tc;
 
 // void setup()
@@ -30,19 +31,19 @@
 // }
 
 
-int main_00()
+int main()
 {
-	int k;
-
-	PRINTF("Times: %f %f %f\n",
+	uint32_t k;
+	cortos_printf("Hello pratham : %f %f %f\n",
 			(double) (0),
 			(double) (0),
 			(double)(HIDDEN));
 
 	// close the channel..
-	int number_imgs = 1 ;
-	PRINTF("SDF &%d", HIDDEN);
-	//Matrix* m = matrix_create(28,28);
+	uint32_t number_imgs = 1 ;
+	cortos_printf("SDF &%d", HIDDEN);
+	Matrix* m = matrix_create(28,28);
+	cortos_printf("Hello prtham matrix created :))");
 	//Img** imgs = csv_to_imgs_from_C(1);
 
 	return(1);

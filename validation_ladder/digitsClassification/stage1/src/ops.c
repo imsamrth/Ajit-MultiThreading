@@ -18,8 +18,8 @@ Matrix* multiply(Matrix *m1, Matrix *m2) {
 		}
 		return m;
 	} else {
-		printf("Dimension mistmatch multiply: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
-		exit(1);
+		cortos_printf("Dimension mistmatch multiply: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
+		cortos_exit(1);
 	}
 }
 
@@ -34,8 +34,8 @@ Matrix* add(Matrix *m1, Matrix *m2) {
 		}
 		return m;
 	} else {
-		printf("Dimension mistmatch add: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
-		exit(1);
+		cortos_printf("Dimension mistmatch add: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
+		cortos_exit(1);
 	}
 }
 
@@ -50,8 +50,8 @@ Matrix* subtract(Matrix *m1, Matrix *m2) {
 		}
 		return m;
 	} else {
-		printf("Dimension mistmatch subtract: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
-		exit(1);
+		cortos_printf("Dimension mistmatch subtract: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
+		cortos_exit(1);
 	}
 }
 
@@ -81,8 +81,8 @@ Matrix* dot(Matrix *m1, Matrix *m2) {
 		}
 		return m;
 	} else {
-		printf("Dimension mistmatch dot: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
-		exit(1);
+		cortos_printf("Dimension mistmatch dot: %dx%d %dx%d\n", m1->rows, m1->cols, m2->rows, m2->cols);
+		cortos_exit(1);
 	}
 }
 
