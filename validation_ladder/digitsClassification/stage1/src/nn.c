@@ -847,6 +847,9 @@ double LAYER2[48*10] = {
 ,-0.561042,0.308261,-0.855462,-0.086503,0.186186,0.331456,-0.168131,0.255660,0.195411,0.211650
 };
 
+double BIAS1[48] = {-0.240726,0.196953,0.261997,0.031742,0.144002,0.224919,-0.110816,0.345275,-0.087779,-0.499253,0.123928,0.087509,0.214982,0.047772,-0.112248,0.170397,-0.005898,0.156119,0.026975,0.156635,0.083642,-0.193418,-0.005485,-0.172234,0.233093,0.529662,0.123412,0.114901,-0.127598,0.004763,-0.118733,0.047982,-0.108551,0.008384,-0.211003,-0.068402,-0.052993,0.077937,0.370921,-0.182423,0.179572,0.095029,0.249379,-0.149892,-0.233128,-0.172658,0.220049,0.323945};
+
+double BIAS2[10] = {0.296672,0.077498,-0.291063,-0.176512,-0.027378,0.085545,-0.113629,0.175021,-0.057135,0.087109};
 // 784, 300, 10
 NeuralNetwork* network_create(int input, int hidden, int output, double lr) {
 	NeuralNetwork* net = cortos_bget(sizeof(NeuralNetwork));
@@ -972,7 +975,9 @@ double network_predict_imgs(NeuralNetwork* net, Img** imgs, int n) {
 	cortos_printf("prediction called %d \n", i);
 	for ( i = 0; i < n; i++) {
 		Matrix* prediction = network_predict_img(net, imgs[i]);
-		if (matrix_argmax(prediction) == imgs[i]->label) {
+		int p = matrix_argmax(prediction);
+		cortos_printf("predicted from net %d and correct is %d \n", p, imgs[i]->label);
+		if (p == imgs[i]->label) {
 			n_correct++;
 		}
 		matrix_free(prediction);
@@ -983,15 +988,19 @@ double network_predict_imgs(NeuralNetwork* net, Img** imgs, int n) {
 
 Matrix* network_predict(NeuralNetwork* net, Matrix* input_data) {
 	Matrix* hidden_inputs	= dot(net->hidden_weights, input_data);
-	Matrix* hidden_outputs = apply(sigmoid, hidden_inputs);
+	Matrix* hidden_sum = add (net->bias_1, hidden_inputs);
+	Matrix* hidden_outputs = apply(relu, hidden_sum);
 	Matrix* final_inputs = dot(net->output_weights, hidden_outputs);
-	Matrix* final_outputs = apply(sigmoid, final_inputs);
-	Matrix* result = softmax(final_outputs);
+	Matrix* final_sum = add (net->bias_2, final_inputs);
+	//Matrix* final_outputs = apply(softmax, final_inputs);
+	Matrix* result = softmax(final_sum);
 
 	matrix_free(hidden_inputs);
 	matrix_free(hidden_outputs);
 	matrix_free(final_inputs);
-	matrix_free(final_outputs);
+	matrix_free(hidden_sum);
+	matrix_free(final_sum);
+	//matrix_free(final_outputs);
 
 	return result;
 }
@@ -1037,6 +1046,8 @@ NeuralNetwork* network_load_from_C() {
 	net->input = INPUT;
 	net->hidden = HIDDEN;
 	net->output = OUT;
+	net->bias_1 = matrix_load_from_C(HIDDEN, 1, BIAS1);
+	net->bias_2 = matrix_load_from_C(OUT, 1, BIAS2);
 	net->hidden_weights = matrix_load_from_C(HIDDEN, INPUT, LAYER1);
 	net->output_weights = matrix_load_from_C(OUT, HIDDEN, LAYER2);
 	cortos_printf("Successfully loaded network from '%s'\n", "NETWORDD");

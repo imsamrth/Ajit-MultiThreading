@@ -38,10 +38,10 @@ void matrix_free(Matrix *m) {
 
 void matrix_print(Matrix* m) {
 	cortos_printf("Rows: %d Columns: %d\n", m->rows, m->cols);
-		int i, j;
+	int i, j;
 	for ( i = 0; i < m->rows; i++) {
 		for (j = 0; j < m->cols; j++) {
-			cortos_printf("%1.3f ", m->entries[i][j]);
+			cortos_printf("%f ", m->entries[i][j]);
 		}
 		cortos_printf("\n");
 	}
