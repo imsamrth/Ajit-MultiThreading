@@ -58,49 +58,17 @@ Matrix* matrix_copy(Matrix* m) {
 	return mat;
 }
 
-void matrix_save(Matrix* m, char* file_string) {
-	// FILE* file = fopen(file_string, "w");
-	// cortos_printf(file, "%d\n", m->rows);
-	// cortos_printf(file, "%d\n", m->cols);
-	// 	int i, j;
-	// for ( i = 0; i < m->rows; i++) {
-	// 	for (j = 0; j < m->cols; j++) {
-	// 		cortos_printf(file, "%.6f\n", m->entries[i][j]);
-	// 	}
-	// }
-	// cortos_printf("Successfully saved matrix to %s\n", file_string);
-	// fclose(file);
-}
-
-Matrix* matrix_load(char* file_string) {
-	// FILE* file = fopen(file_string, "r");
-	// char entry[MAXCHAR]; 
-	// fgets(entry, MAXCHAR, file);
-	// int rows = atoi(entry);
-	// fgets(entry, MAXCHAR, file);
-	// int cols = atoi(entry);
-	Matrix* m = matrix_create(1, 1);
-	// 	int i, j;
-	// for ( i = 0; i < m->rows; i++) {
-	// 	for (j = 0; j < m->cols; j++) {
-	// 		fgets(entry, MAXCHAR, file);
-	// 		m->entries[i][j] = strtod(entry, NULL);
-	// 	}
-	// }
-	// cortos_printf("Sucessfully loaded matrix from %s\n", file_string);
-	// fclose(file);
-	return m;
-}
-
 Matrix* matrix_load_from_C(int rows, int cols, double * weights) {
+	//cortos_printf("matrix of size loaded %d * %d\n" , rows , cols);	
 	Matrix* m = matrix_create(rows, cols);
-		int i, j;
+	int i, j;
+	//if(rows == 48) cortos_printf("%d\n" , 10);	
 	for ( i = 0; i < m->rows; i++) {
 		for (j = 0; j < m->cols; j++) {
 			m->entries[i][j] = weights[i*cols + j];
+			//if(rows == 48) cortos_printf("%d\n" , j);
 		}
 	}
-	cortos_printf("Sucessfully loaded matrix from %d\n", rows);
 	return m;
 }
 
@@ -136,6 +104,7 @@ int matrix_argmax(Matrix* m) {
 			max_score = m->entries[i][0];
 			max_idx = i;
 		}
+		//cortos_printf(" p for %d is = %f \n", i , m->entries[i][0]);
 	}
 	return max_idx;
 }

@@ -11,8 +11,6 @@ void matrix_fill(Matrix *m, int n);
 void matrix_free(Matrix *m);
 void matrix_print(Matrix *m);
 Matrix* matrix_copy(Matrix *m);
-void matrix_save(Matrix* m, char* file_string);
-Matrix* matrix_load(char* file_string);
 Matrix* matrix_load_from_C(int rows, int cols, double * weights);
 void matrix_randomize(Matrix* m, int n);
 int matrix_argmax(Matrix* m);

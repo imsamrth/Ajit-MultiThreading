@@ -74,15 +74,15 @@ Img** csv_to_imgs_from_C(int number_of_imgs) {
 		while (token != NULL) {
 			if (j == 0) {
 				imgs[i]->label = atoi(token);
-				cortos_printf("image label %d \n", imgs[i]->label);
+				//cortos_printf("image label %d & i = %d\n", imgs[i]->label, i);
 			} else {
 				imgs[i]->img_data->entries[(j-1) / 28][(j-1) % 28] = atoi(token) / 256.0;
-				//if(i == 1) {cortos_printf("hi index %d \n", j);}
+				//cortos_printf(" j = %d\n", j);
 			}
 			token = strtok(NULL, ",");
 			j++;
 		}
-		cortos_printf("first element of j = %d \n", i );
+		//cortos_printf("first element of j = %d \n", i );
 		//cortos_printf("last element of img %f \n", imgs[i]->img_data->entries[(j-2)/28][(j-2) % 28]);
 		i++;
 	}
