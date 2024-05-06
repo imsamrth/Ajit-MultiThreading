@@ -148,7 +148,6 @@ ifft( complex *v, int n, complex *tmp )
 	}
 	return;
 }
-
 	void
 ifft_top( complex *v, int n, complex *tmp )
 {

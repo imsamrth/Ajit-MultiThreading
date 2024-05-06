@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "core_portme.h"
-#include "cortos.h"
+#include <core_portme.h>
+#include <cortos.h>
 #include "ajit_access_routines.h"
 
 #define NIC_START_ADDR 0x10000000

@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 #include "../include/matrix.h"
 #include "../include/ops.h"
 #include "../include/activations.h"
+#include "../include/decl.h"
+#include <stdint.h>
 
 typedef struct
 {
@@ -89,7 +92,7 @@ void unet_train(UNetModel *model, Matrix *input_images, Matrix *target_masks, in
         }
 }
 
-int process_image(uint32_t ** k_addr, uint32_t ** t_addr, NicQueue *nQ, uint32_t stage)
+Matrix* process_image(uint32_t ** k_addr, uint32_t ** t_addr, NicQueue *nQ, uint32_t stage)
 {
         // Example usage
         int input_rows = 256;
@@ -100,18 +103,21 @@ int process_image(uint32_t ** k_addr, uint32_t ** t_addr, NicQueue *nQ, uint32_t
         UNetModel *model = unet_create(input_rows, input_cols, num_channels, num_classes);
 
         // Example training data (random matrices for illustration)
-        Matrix *input_images = matrix_create(input_rows, input_cols);
+        Matrix *input_images;
+        input_images = matrix_create(input_rows, input_cols);
         matrix_randomize(input_images, 255); // Randomize pixel values
-        Matrix *target_masks = matrix_create(input_rows, input_cols);
+        Matrix *target_masks;
+        target_masks = matrix_create(input_rows, input_cols);
         matrix_fill(target_masks, 1); // Example mask (binary)
 
         // Train the UNet model
-        unet_train(model, input_images, target_masks, 10, 0.001); // 10 epochs, learning rate 0.001
+        Matrix *output_masks;
+        output_masks = unet_forward(model, input_images);
 
         // Free memory
         matrix_free(input_images);
         matrix_free(target_masks);
         unet_free(model);
 
-        return 0;
+        return output_masks;
 }
